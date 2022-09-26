@@ -1,0 +1,28 @@
+@startuml
+!include https://raw.githubusercontent.com/adrianvlupu/C4-PlantUML/latest/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+
+Container(spa, "Single Page Application", "java and Spring MVC", "Fornece um conjunto de funcionalidades ao usuários por meio do navegador web")
+Container(ma, "Aplicativo de Celular", "ONG PETS", "Fornece um subconjunto de funcionalidades para os usuários por meio de seu dispositivo móvel")
+Container(db, "DATABASE", "Banco de dados Relacional", "Armazena informações de registro do usuário, credenciais de autenticação com hash, logs de acesso, etc.")
+System_Ext(mbs, "Sistema de Adoção de Pets", "Armazena as requisições realizadas pelos usuários... ")
+
+Container_Boundary(api, "API Application") {
+    Component(sign, "Sign In Controller", "MVC Rest Controlle", "Permite que os usuários realizam login nas aplicações")
+    Component(accounts, "Accounts Summary Controller", "MVC Rest Controlle", "Fornece aos clientes um resumo das suas solicitações para ONG")
+    Component(security, "Security Component", "Spring Bean", "Fornece funcionalidades para alterar senhas.")
+    Component(mbsfacade, "Adoção de PETS", "Spring Bean", "Interface para Sistema para adoção de PETS")
+
+    Rel(sign, security, "Uses")
+    Rel(accounts, mbsfacade, "Uses")
+    Rel(security, db, "Leitura e Escrita", "JDBC")
+    Rel(mbsfacade, mbs, "Uses", "HTTPS")
+}
+
+Rel(spa, sign, "Uses", "JSON/HTTPS")
+Rel(spa, accounts, "Uses", "JSON/HTTPS")
+
+Rel(ma, sign, "Uses", "JSON/HTTPS")
+Rel(ma, accounts, "Uses", "JSON/HTTPS")
+@enduml

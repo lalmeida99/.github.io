@@ -1,0 +1,25 @@
+@startuml
+
+!include https://raw.githubusercontent.com/adrianvlupu/C4-PlantUML/latest/C4_Context.puml
+
+LAYOUT_WITH_LEGEND()
+
+Person(usu, "Usuário", "Adoção de Pets.")
+Person_Ext(fun, "Funcionario", "Registra pets para adoção e analisa requerimentos")
+
+System(app, "Aplicativo de Celular", "Permite os usuários do aplicativo verificar informações sobre os pets, e registrar requerimento de adoção.")
+System_Ext(sao, "Sistema administrativo da ONG", "armazena todas as informacoes sobre os pets disponiveis a adocao e armazena requerimentos.")
+System_Ext(ems, "E-mail system", "The internal Microsoft Exchange e-mail system.")
+System_Ext(api, "API", "Disponibiliza os dados do sistema administrativo")
+
+Rel(usu, app, "Uses")
+Rel(ems, usu, "Sends e-mails to")
+Rel(api, ems, "Sends e-mails", "SMTP")
+Rel(fun, sao, "Uses")
+Rel(app, api, "Uses")
+Rel(sao, api, "Uses")
+
+
+
+@enduml
+

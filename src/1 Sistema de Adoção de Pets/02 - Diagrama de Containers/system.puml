@@ -1,0 +1,26 @@
+@startuml
+!include https://raw.githubusercontent.com/adrianvlupu/C4-PlantUML/latest/C4_Container.puml
+
+LAYOUT_WITH_LEGEND()
+
+Person(usu, "Usuário", "Adoção de Pets.")
+System_Ext(sao, "Sistema administrativo da ONG", "armazena todas as informacoes sobre os pets disponiveis a adocao e armazena requerimentos.")
+System_Ext(ems, "Sistema de E-mail", "O sistema de e-mail interno do Microsoft Exchange.")
+System_Ext(api, "API", "Disponibiliza os dados do sistema administrativo")
+
+
+
+System_Boundary(app, "Aplicativo de Celular") {
+    Container(ma, "Mobile App", "Kotlin", "Provisiona visualização dos animais de estimação possiveis de serem adotados, informação sobre doação de dinheiro ou alimentos através de links externos, registro e visualização dos requerimentos de adoção através da API, registro e login de usuário através da api")
+    Container(db, "Database", "Armazena configurações pessoais do aplicativo como tema, usuario logado")
+
+    Rel(ma,db, "Uses")
+}
+
+Rel(usu, app, "Uses")
+Rel(ems, usu, "Sends e-mails to")
+Rel(api, ems, "Sends e-mails", "SMTP")
+Rel(ma, api, "Uses")
+Rel(sao, api, "Uses")
+
+@enduml
